@@ -6,7 +6,7 @@
     "prompt_text": "视频描述词 (必填)",
     "image_url": "参考图片URL (可选)",
     "asset": {
-      "characters": "出场角色列表，例如 ['小美 @xiaomei', '王大力 @wangdali']",
+      "characters": "出场角色列表，例如 ['小美@xiaomei ', '大力@wdali ']",
       "scene": "场景描述",
       "props": "道具列表"
     },

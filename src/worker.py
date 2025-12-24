@@ -3,6 +3,7 @@ import json
 import logging
 import random
 import gc
+import re
 from pathlib import Path
 from typing import Dict, Any, Literal
 from .models import GenerationTask
@@ -17,6 +18,46 @@ logger = logging.getLogger(__name__)
 POLL_INITIAL_WAIT = 20  
 POLL_INTERVAL = 10      
 MAX_POLL_TIME = 2100     # 35分钟 (覆盖 Pro 模式最长生成时间)
+
+def construct_enhanced_prompt(segment) -> str:
+    """
+    Constructs a rich prompt by merging prompt_text with asset info and director intent.
+    Ensures no narrative context is lost when sending to the API.
+    Also enforces @characterid format with trailing space.
+    """
+    final_prompt = segment.prompt_text.strip()
+    
+    # 1. Asset Integration (Scene, Characters, Props)
+    asset_info = []
+    if segment.asset:
+        if segment.asset.scene:
+            asset_info.append(f"Scene: {segment.asset.scene}")
+        
+        if segment.asset.characters:
+            chars_str = ", ".join(segment.asset.characters)
+            asset_info.append(f"Characters: {chars_str}")
+            
+        if segment.asset.props:
+            props_str = ", ".join(segment.asset.props)
+            asset_info.append(f"Props: {props_str}")
+            
+    if asset_info:
+        final_prompt += f" [{ ' | '.join(asset_info) }]"
+
+    if segment.director_intent:
+        final_prompt += f" (Director Note: {segment.director_intent})"
+
+    # 3. CRITICAL FIX: Ensure @characterid is followed by a space
+    # Regex explanation: 
+    # Find '@' followed by word characters (\w+), 
+    # but ONLY if not already followed by a space.
+    # We replace it with the match + a space.
+    final_prompt = re.sub(r'(@\w+)(?!\s)', r'\1 ', final_prompt)
+    
+    # Clean up any potential double spaces created by the above (safety)
+    final_prompt = re.sub(r'\s+', ' ', final_prompt)
+        
+    return final_prompt.strip()
 
 def process_task(
     task: GenerationTask, 
@@ -57,9 +98,12 @@ def _process_task_internal(
         logger.info(f"Skipping task {task.id} - file exists.")
         return "skipped"
 
+    # 1.5 Construct Full Prompt (Merge metadata into prompt)
+    full_prompt = construct_enhanced_prompt(task.segment)
+
     # 2. Dry Run
     if dry_run:
-        logger.info(f"[DRY RUN] Would create task for: {task.segment.prompt_text[:30]}...")
+        logger.info(f"[DRY RUN] Final Prompt: {full_prompt[:100]}...")
         return "dry_run"
 
     try:
@@ -70,7 +114,7 @@ def _process_task_internal(
         logger.info(f"Submitting task {task.id}")
         try:
             task_id = client.create_task(
-                prompt=task.segment.prompt_text,
+                prompt=full_prompt,  # Use the enhanced prompt
                 duration=task.segment.duration_seconds,
                 resolution=task.segment.resolution,
                 is_pro=task.segment.is_pro,

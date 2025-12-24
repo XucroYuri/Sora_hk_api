@@ -17,10 +17,10 @@
     },
     {
       "segment_index": 2,
-      "prompt_text": "Close up of a character named Alice (@alice ) smiling warmly at the camera.",
+      "prompt_text": "Close up of a character named Alice(@alice ) smiling warmly at the camera.",
       "image_url": null,
       "asset": {
-        "characters": ["Alice @alice"],
+        "characters": ["Alice@alice "],
         "scene": "Room",
         "props": []
       },
