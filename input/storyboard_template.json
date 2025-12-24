@@ -2,33 +2,32 @@
   "_comment": "Sora 视频生成分镜模板 - 请将文件名命名为 storyboard_*.json",
   
   "_schema_info": {
-    "segment_index": "分镜序号，用于排序和文件命名 (必填)",
+    "segment_index": "分镜序号 (必填)",
     "prompt_text": "视频描述词 (必填)",
-    "image_url": "参考图片URL，必须是公网可访问的地址 (可选，默认 null)",
-    "duration_seconds": "时长，普通模式可选[10, 15]，Pro模式可选[10, 15, 25] (默认 10)",
-    "is_pro": "是否使用 Pro 模型，true 或 false (默认 false)",
-    "resolution": "分辨率，'horizontal' (16:9) 或 'vertical' (9:16) (默认 'horizontal')",
-    "director_intent": "导演意图，仅作为备注，不会传给 API (可选)"
+    "image_url": "参考图片URL (可选)",
+    "asset": {
+      "characters": "出场角色列表，例如 ['小美 @xiaomei', '王大力 @wangdali']",
+      "scene": "场景描述",
+      "props": "道具列表"
+    },
+    "duration_seconds": "[10, 15] (Normal) 或 [10, 15, 25] (Pro)",
+    "is_pro": "true/false",
+    "resolution": "'horizontal'/'vertical'"
   },
 
   "segments": [
     {
       "segment_index": 1,
-      "prompt_text": "一个精致的未来城市全景，夕阳西下，霓虹灯倒映在潮湿的地面上。",
+      "prompt_text": "一个精致的未来城市全景，夕阳西下...",
       "image_url": null,
+      "asset": {
+        "characters": [],
+        "scene": "未来城市",
+        "props": []
+      },
       "duration_seconds": 10,
       "is_pro": false,
-      "resolution": "horizontal",
-      "director_intent": "开场镜头"
-    },
-    {
-      "segment_index": 2,
-      "prompt_text": "镜头拉近，机器人慢慢睁开眼睛，内部零件清晰可见。",
-      "image_url": "https://example.com/reference.jpg",
-      "duration_seconds": 15,
-      "is_pro": true,
-      "resolution": "vertical",
-      "director_intent": "特写细节"
+      "resolution": "horizontal"
     }
   ]
 }

@@ -1,23 +1,33 @@
 {
-  "_comment": "Standardized storyboard based on 502期-免写作业的诱惑",
+  "_comment": "Standardized storyboard demo (Generic)",
   "segments": [
     {
       "segment_index": 1,
-      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of \"KAI XIN CHUI CHUI\"),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：教室； 镜头：A特写王大力 @wangdali_cc 满分试卷疯狂糊脸；B快速拉开展示全班狂欢 乱象；C小品 @xiaopin_cc 挥舞‘免作业’大旗歪嘴笑；D字幕‘全班平均分90’；叙事：铺垫；情感：狂躁；节奏：视觉贴脸→全景混乱→小品亮相；护栏：2D、Shake震动、巨大字幕]",
+      "prompt_text": "A futuristic city skyline at night with neon lights reflecting on the river. Cyberpunk style.",
       "image_url": null,
+      "asset": {
+        "characters": [],
+        "scene": "Future City",
+        "props": []
+      },
       "duration_seconds": 10,
       "is_pro": false,
       "resolution": "horizontal",
-      "director_intent": "开场即高潮。用极度夸张的贴脸镜头和全班乱象， 表现学生们因罕见的高分而陷入的集体癫狂。"
+      "director_intent": "Establishing shot."
     },
     {
       "segment_index": 2,
-      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of \"KAI XIN CHUI CHUI\"),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：教室讲 台；镜头：A小美 @teacher_xiaomei_cc 老师 @teacher_xiaomei_cc 平静批改形成静止气场；B小美 @teacher_xiaomei_cc 机械微笑提出‘复读游戏’；C王大力 @wangdali_cc 拍胸脯肌肉颤抖；D战鼓声起；叙事：对抗建立；情感：冷静vs狂热；节奏：静止压迫→规则宣读→无脑接战；护栏：2D、冷光特效、肌肉抖动]",
+      "prompt_text": "Close up of a character named Alice (@alice ) smiling warmly at the camera.",
       "image_url": null,
+      "asset": {
+        "characters": ["Alice @alice"],
+        "scene": "Room",
+        "props": []
+      },
       "duration_seconds": 10,
       "is_pro": false,
       "resolution": "horizontal",
-      "director_intent": "建立‘冷静老师’与‘狂热学生’的对抗关系，老师的 平静中暗杀机。"
+      "director_intent": "Character introduction."
     }
   ]
 }

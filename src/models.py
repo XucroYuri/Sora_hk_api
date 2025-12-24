@@ -1,25 +1,35 @@
 from typing import List, Optional, Literal
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, model_validator
 from pathlib import Path
+
+class Asset(BaseModel):
+    characters: List[str] = Field(default_factory=list, description="List of character names or IDs")
+    scene: Optional[str] = None
+    props: List[str] = Field(default_factory=list, description="List of props")
 
 class Segment(BaseModel):
     segment_index: int
     prompt_text: str
-    # 附加图片 (可选) - 必须是公网可访问的 URL
     image_url: Optional[str] = None
     
-    # 视频参数
+    # New Asset Field
+    asset: Optional[Asset] = Field(default_factory=lambda: Asset())
+
+    # Video Params
     is_pro: bool = False
     duration_seconds: int = 10
     resolution: Literal["horizontal", "vertical"] = "horizontal"
     
-    # Optional metadata
+    # Metadata
     director_intent: Optional[str] = None
     
     @model_validator(mode='after')
-    def validate_duration_constraints(self):
-        # 普通模式：10/15（默认10）
-        # Pro模式：10/15/25（默认10）
+    def validate_segment_integrity(self):
+        # 1. Validate Prompt
+        if not self.prompt_text or not self.prompt_text.strip():
+            raise ValueError("Prompt text cannot be empty.")
+
+        # 2. Validate Duration
         allowed_normal = [10, 15]
         allowed_pro = [10, 15, 25]
         
@@ -33,11 +43,9 @@ class Segment(BaseModel):
 
 class Storyboard(BaseModel):
     segments: List[Segment]
+    _comment: Optional[str] = None
 
 class GenerationTask(BaseModel):
-    """
-    Represents a single video generation job (one version of a segment).
-    """
     id: str
     source_file: Path
     segment: Segment

@@ -20,6 +20,7 @@ from src.api_client import SoraClient
 from src.worker import process_task
 from src.models import GenerationTask
 from src.concurrency import init_controller
+from src.interactor import interactive_asset_injection
 
 # Setup Rich Console
 console = Console()
@@ -93,6 +94,12 @@ def main():
         if len(tasks) > 3:
             console.print("   ...")
         sys.exit(0)
+
+    # 4.5 Interactive Asset Injection
+    if not args.dry_run:
+        # Only ask in real run (or dry run too? maybe useful to see effect)
+        # User requirement: "终端交互时询问"
+        interactive_asset_injection(tasks)
 
     # 5. Execution
     console.print(f"\n[bold]开始执行[/bold] - 任务总数: [cyan]{len(tasks)}[/cyan] | 最大并发: [cyan]{settings.MAX_CONCURRENT_TASKS}[/cyan]")
