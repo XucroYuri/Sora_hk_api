@@ -1,0 +1,30 @@
+{
+  "_comment": "Standard template for Sora Video Generation.",
+  "_comment_params": {
+    "prompt_text": "REQUIRED. The text description for video generation.",
+    "image_url": "OPTIONAL. HTTP/HTTPS URL of a reference image. LOCAL FILES NOT SUPPORTED.",
+    "is_pro": "OPTIONAL. Boolean (true/false). Default: false.",
+    "duration_seconds": "OPTIONAL. Integer. Normal Mode: [10, 15]. Pro Mode: [10, 15, 25]. Default: 10.",
+    "resolution": "OPTIONAL. String. Options: 'horizontal' (16:9), 'vertical' (9:16). Default: 'horizontal'.",
+    "director_intent": "OPTIONAL. Metadata for your own reference, ignored by API."
+  },
+  "segments": [
+    {
+      "segment_index": 1,
+      "prompt_text": "A cinematic drone shot of a futuristic city at sunset, neon lights reflecting on wet pavement.",
+      "duration_seconds": 10,
+      "resolution": "horizontal",
+      "is_pro": false,
+      "director_intent": "Establishing shot."
+    },
+    {
+      "segment_index": 2,
+      "prompt_text": "Close up of a robot's eye opening.",
+      "duration_seconds": 15,
+      "resolution": "vertical",
+      "is_pro": true,
+      "image_url": "https://example.com/ref_image.jpg",
+      "_comment": "Pro mode allows 25s duration if needed."
+    }
+  ]
+}

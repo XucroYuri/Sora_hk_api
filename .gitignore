@@ -1,0 +1,28 @@
+# Environments
+.env
+.venv
+venv/
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+
+# Output & Media
+output/
+*.log
+failed_tasks_log.json
+*.mp4
+*.mov
+*.avi
+
+# Temporary
+*.tmp
+
+# Input Protection (Only allow templates to be committed)
+input/*
+!input/_template.json
+!input/storyboard_template.json
+!input/storyboard_demo.json
