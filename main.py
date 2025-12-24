@@ -39,7 +39,7 @@ def run_wizard_mode(args):
     交互式向导流程
     """
     # Header
-    console.print(Panel.fit("[bold magenta]Sora HK 批量生成工具[/bold magenta]\n[dim]Sora Batch Video Generator[/dim]", border_style="magenta"))
+    console.print(Panel.fit("[bold magenta]CineFlow (影流) - 通用视频生成流水线[/bold magenta]\n[dim]Universal Video Generation Pipeline[/dim]", border_style="magenta"))
     
     # --- Step 1: Input Source & Scan Loop ---
     tasks = []

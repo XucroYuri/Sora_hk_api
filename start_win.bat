@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 > nul
 echo ==========================================
-echo       Sora Video Batch Generator
+echo       CineFlow (影流) Video Pipeline
 echo              (Windows)
 echo ==========================================
 

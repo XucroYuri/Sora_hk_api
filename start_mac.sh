@@ -4,7 +4,7 @@
 cd "$(dirname "$0")"
 
 echo "=========================================="
-echo "       Sora Video Batch Generator"
+echo "      CineFlow (影流) Video Pipeline"
 echo "              (macOS/Linux)"
 echo "=========================================="
 
