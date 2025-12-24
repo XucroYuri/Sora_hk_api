@@ -1,9 +1,9 @@
-# Sora HK 视频批量生成工具 (Sora Batch Generator)
+# Sora.hk 视频批量生成工具 (Sora Batch Generator)
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-一个企业级的 Sora 视频批量生成后端程序，专为高并发、大规模任务设计。支持断点续传、自适应并发控制、自动重试与素材整理。
+一个基于 [Sora.hk](https://www.sora.hk/) API 开发的企业级视频批量生成后端程序，专为高并发、大规模分镜任务设计。支持断点续传、自适应并发控制、自动重试与素材整理。
 
 ## ✨ 核心特性
 
