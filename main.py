@@ -122,8 +122,10 @@ def run_wizard_mode(args):
     console.print("请选择视频生成结果的保存方式:")
     console.print("  [1] [bold green]集中存储[/bold green] (./output/...) - 默认")
     console.print("  [2] [bold yellow]原位存储[/bold yellow] (在输入文件同级目录创建 _assets 文件夹)")
+    console.print("  [3] [bold cyan]自定义路径[/bold cyan] (输入指定目录)")
     
-    choice = Prompt.ask("请输入选项", choices=["1", "2"], default="1")
+    choice = Prompt.ask("请输入选项", choices=["1", "2", "3"], default="1")
+    
     if choice == "2":
         output_mode = "in_place"
         console.print("[dim]正在更新任务输出路径...[/dim]")
@@ -131,6 +133,19 @@ def run_wizard_mode(args):
             # Re-calculate output dir for the filtered/new tasks
             base_output_dir = task.source_file.parent / f"{task.source_file.stem}_assets"
             task.output_dir = base_output_dir / f"Segment_{task.segment.segment_index}"
+            
+    elif choice == "3":
+        output_mode = "custom"
+        custom_path_str = Prompt.ask("请输入目标存储目录路径")
+        custom_root = Path(custom_path_str)
+        console.print(f"[dim]正在更新任务输出路径至: {custom_root}[/dim]")
+        
+        for task in tasks:
+            # Re-calculate output dir: Custom_Root/{Json_Filename}/Segment_X
+            # We maintain the project/file structure to avoid flat collisions
+            base_output_dir = custom_root / task.source_file.stem
+            task.output_dir = base_output_dir / f"Segment_{task.segment.segment_index}"
+            
     else:
         output_mode = "centralized"
         
