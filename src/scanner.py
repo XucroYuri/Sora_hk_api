@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import List, Literal
 from .models import Storyboard, GenerationTask
 from .config import settings
+from .asset_manager import AssetManager
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,7 @@ def discover_tasks(
 ) -> List[GenerationTask]:
     """
     Recursively scans input_dir for storyboard*.json files and creates GenerationTasks.
+    Also scaffolds the standard 'asset' directory structure for each found file.
     """
     tasks = []
     
@@ -28,6 +30,10 @@ def discover_tasks(
     for json_file in input_dir.rglob("storyboard*.json"):
         try:
             logger.debug(f"Parsing file: {json_file}")
+            
+            # 1. Initialize Asset Structure
+            asset_mgr = AssetManager(json_file)
+            asset_mgr.scaffold()
             
             with open(json_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
