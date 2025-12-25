@@ -293,6 +293,7 @@ def interactive_asset_injection(tasks: List[GenerationTask]):
     
     console.print("\n[bold]🚀 开始 ID 补充流程[/bold]")
     console.print("操作指南: 输入新 ID 回车覆盖。直接 [bold]回车[/bold] 则保持当前状态(跳过)。输入 'q' 结束。")
+    console.print("         输入 [bold red]rm[/bold red] (或 clear, del) 可清除当前角色的 ID 绑定。")
     
     for name, stats in sorted_candidates:
         existing_ids = stats['existing_ids']
@@ -308,6 +309,10 @@ def interactive_asset_injection(tasks: List[GenerationTask]):
         
         if char_id.lower() == 'q':
             break
+        
+        if char_id.lower() in ['rm', 'clear', 'del']:
+            _remove_id_injection(tasks, name)
+            continue
             
         if char_id.strip():
             # User provided an ID, apply injection/replacement
@@ -317,6 +322,49 @@ def interactive_asset_injection(tasks: List[GenerationTask]):
             console.print("[dim]⏭ 保持原状 (跳过)[/dim]")
 
     console.print("[dim]角色 ID 注入完成。[/dim]\n")
+
+def _remove_id_injection(tasks: List[GenerationTask], name: str):
+    """
+    Helper to remove ID injection.
+    1. Reverts Prompt to: Name
+    2. Reverts Asset to: Name
+    """
+    replaced_count = 0
+    
+    for t in tasks:
+        # 1. Update Prompt Text
+        # Find "Name (@ID )" or "Name (@ID)"
+        # Regex: Name followed by optional existing tag (\s*\(@[^)]+\))
+        # We replace the whole match with just "Name"
+        pattern = fr"{re.escape(name)}\s*\(@[^)]+\)"
+        if re.search(pattern, t.segment.prompt_text):
+            new_prompt = re.sub(pattern, name, t.segment.prompt_text)
+            if new_prompt != t.segment.prompt_text:
+                t.segment.prompt_text = new_prompt
+                replaced_count += 1
+                
+        # 2. Update Asset metadata
+        new_char_list = []
+        updated_asset = False
+        for c in t.segment.asset.characters:
+            c_name, _ = _parse_name_and_id(c)
+            if c_name == name:
+                # If currently has ID (e.g. Name@ID), revert to Name
+                if c != name:
+                    new_char_list.append(name)
+                    updated_asset = True
+                else:
+                    new_char_list.append(c)
+            else:
+                new_char_list.append(c)
+        
+        if updated_asset:
+            t.segment.asset.characters = new_char_list
+
+    if replaced_count > 0 or updated_asset:
+        console.print(f" -> [yellow]已移除 {name} 的 ID 绑定 ({replaced_count} 处 Prompt 更新)。[/yellow]")
+    else:
+        console.print(f" -> [dim]未发现需要移除的 ID 绑定。[/dim]")
 
 def interactive_image_injection(tasks: List[GenerationTask]):
     """
