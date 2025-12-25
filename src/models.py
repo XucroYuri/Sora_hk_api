@@ -1,6 +1,9 @@
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field, model_validator
 from pathlib import Path
+from datetime import datetime
+import random
+import string
 
 class Asset(BaseModel):
     characters: List[str] = Field(default_factory=list, description="List of character names or IDs")
@@ -52,6 +55,11 @@ class GenerationTask(BaseModel):
     version_index: int
     output_dir: Path
     
+    # Unique identifiers for filename to prevent overwrite
+    timestamp: str = Field(default_factory=lambda: datetime.now().strftime("%Y%m%d%H%M%S"))
+    random_suffix: str = Field(default_factory=lambda: ''.join(random.choices(string.ascii_lowercase + string.digits, k=4)))
+    
     @property
     def output_filename_base(self) -> str:
-        return f"{self.segment.segment_index}_v{self.version_index}"
+        # Format: 1_v1_20231225120000_abcd
+        return f"{self.segment.segment_index}_v{self.version_index}_{self.timestamp}_{self.random_suffix}"
