@@ -320,8 +320,7 @@ def _parse_name_and_id(char_str: str):
     # "Name@ID" split '@' gives "Name" and "ID"
     
     # Try regex for the cleaner "Name (@ID)" pattern first
-    match_paren = re.search(r'^(.*?)\s*\(@([^)]+)\)\s*
-, char_str)
+    match_paren = re.search(r'^(.*?)\s*\(@([^)]+)\)\s*$', char_str)
     if match_paren:
         name = match_paren.group(1).strip()
         raw_id = match_paren.group(2).strip()
