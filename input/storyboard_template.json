@@ -1,32 +1,35 @@
 {
-  "_comment": "Sora 视频生成分镜模板 - 请将文件名命名为 storyboard_*.json",
-  
+  "_comment": "Standardized Storyboard Template v2.0 - Based on 'Deep Segmentation' Schema",
   "_schema_info": {
-    "segment_index": "分镜序号 (必填)",
-    "prompt_text": "视频描述词 (必填)",
-    "image_url": "参考图片URL (可选)",
+    "segment_index": "Integer (1-based index)",
+    "prompt_text": "String. Strict formatting: [Style Tags...]; Scene Description; [Character] Action/Dialogue",
+    "image_url": "String or Null (Optional reference image)",
     "asset": {
-      "characters": "出场角色列表，例如 ['小美@xiaomei ', '大力@wdali ']",
-      "scene": "场景描述",
-      "props": "道具列表"
+      "characters": "Array of Strings (e.g., ['[CharacterName]'])",
+      "scene": "String (Scene Header/Location)",
+      "props": "Array of Strings (Key objects/VFX elements)"
     },
-    "duration_seconds": "[10, 15] (Normal) 或 [10, 15, 25] (Pro)",
-    "is_pro": "true/false",
-    "resolution": "'horizontal'/'vertical'"
+    "duration_seconds": "Integer (Duration of this specific segment)",
+    "is_pro": "Boolean (Always true for this schema)",
+    "resolution": "String ('horizontal' or 'vertical')"
   },
-
   "segments": [
     {
       "segment_index": 1,
-      "prompt_text": "一个精致的未来城市全景，夕阳西下...",
+      "prompt_text": "[Style Tags：art(...), animation(...)；风格：StyleName；场景：Location Description；镜头：Camera/Action Description containing [Character] and \"Dialogue\" and (Emotion)；SFX：Sound Effects]",
       "image_url": null,
       "asset": {
-        "characters": [],
-        "scene": "未来城市",
-        "props": []
+        "characters": [
+          "[CharacterName]"
+        ],
+        "scene": "Location-TIME",
+        "props": [
+          "Prop1",
+          "Prop2"
+        ]
       },
-      "duration_seconds": 10,
-      "is_pro": false,
+      "duration_seconds": 5,
+      "is_pro": true,
       "resolution": "horizontal"
     }
   ]

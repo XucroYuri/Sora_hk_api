@@ -66,7 +66,13 @@ def run_wizard_mode(args):
         input_dir = Path(user_path_str)
         
         if not input_dir.exists():
-            console.print(f"[red]❌ 目录不存在: {input_dir}[/red]")
+            console.print(f"[red]❌ 路径不存在: {input_dir}[/red]")
+            if not Confirm.ask("是否重新输入?"):
+                sys.exit(0)
+            continue
+            
+        if not input_dir.is_dir():
+            console.print(f"[red]❌ 该路径不是一个目录 (请选择文件夹): {input_dir}[/red]")
             if not Confirm.ask("是否重新输入?"):
                 sys.exit(0)
             continue

@@ -1,6 +1,9 @@
 requests>=2.31.0
+urllib3<2.0.0
 python-dotenv>=1.0.0
 rich>=13.7.0
 pydantic>=2.5.0
 pydantic-settings>=2.0.0
-tenacity>=8.2.3cos-python-sdk-v5>=1.9.0
+tenacity>=8.2.3
+cos-python-sdk-v5>=1.9.0
+google-generativeai>=0.3.0

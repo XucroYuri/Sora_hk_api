@@ -1,0 +1,399 @@
+{
+  "_comment": "Based on 九九：冻灵熊冰原极寒大逃杀.md and Animation Lean Schema - Detailed Segmentation",
+  "_schema_info": {
+    "segment_index": "分镜序号",
+    "prompt_text": "视频描述词 (High granularity, strict formatting)",
+    "image_url": "参考图片URL",
+    "asset": {
+      "characters": "出场角色列表",
+      "scene": "场景描述",
+      "props": "道具列表"
+    },
+    "duration_seconds": "Duration in seconds",
+    "is_pro": "true",
+    "resolution": "horizontal"
+  },
+  "segments": [
+    {
+      "segment_index": 1,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原，夜晚，寒风凛冽；镜头：【画面：开幕雷击】画面亮起瞬间，一张巨大的、由剔透冰晶构成的[冻灵熊]脸（特写）占据屏幕。他的巨爪捏着一个正在冒浓重白气的[路人X]。SFX：嘎嘣！[冻灵熊]两指一捏，[路人X]连同那团白气直接炸裂成漫天冰晶。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[路人X]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "冰晶",
+          "白气"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 2,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：[冻灵熊](盯着镜头，阴森戏谑) \"谁先冒白气……就会没命哟！\" 【路人反应：恐慌传播】人群瞬间炸锅，所有人都在疯狂捂嘴。[路人甲]：\"别呼吸！他是听呼吸声的！\" [路人乙]：\"憋气！快憋气！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[路人甲]",
+          "[路人乙]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": []
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 3,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：[九九](惊恐捂嘴) \"冒白气……？他是让我们屏住呼吸？！\" [九九](POV) [九九]看着转盘，转盘上有很多北极南极的动物图标，视线扫过角落的【水母】。[炮灰A](O.S.)(指着水母图标嘲笑) \"哈？这还有个塑料袋？选这个是嫌死得不够快吗？\" [路人群]：(哄笑) \"垃圾图标！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[九九]",
+          "[炮灰A]",
+          "[路人群]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "转盘",
+          "水母图标"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 4,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：UI弹窗系统音:【第一轮猎杀倒计时】。[炮灰A](憋气失败，浑身冒烟) \"不行！憋不住！\" (看向转盘，大喊) \"听我的！变北极熊！皮毛最厚，肯定能锁住热气！\" 【干扰项：企鹅登场】[路人D](瑟瑟发抖) \"我……我选企鹅！企鹅小！气少！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[炮灰A]",
+          "[路人D]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI弹窗"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 5,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：VFX：[炮灰A]等人变身【北极熊】，[路人D]等人变身【企鹅】。【BOSS误导行为】[冻灵熊]低下头，凑近[北极熊]闻了闻。[冻灵熊](评价) \"嗯……这身皮毛，确实暖和。\" UI弹窗:【威胁值：下降】(假信号)。[炮灰A](狂喜) \"看见没！我就说是对的！我们锁住了！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[炮灰A]",
+          "[冻灵熊]",
+          "[路人D]",
+          "[北极熊]",
+          "[企鹅]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "北极熊Avatar",
+          "企鹅Avatar"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 6,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：动作/反转：[北极熊]因为激动，吼了一声，喷出巨大白雾。[冻灵熊](眼神瞬间变冷) \"暖和是暖和……但太吵了。\" VFX：[冻灵熊]一指头点爆[北极熊]。屏显: — ELIMINATED —]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[北极熊]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "巨大白雾",
+          "冰晶"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 7,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：【幸存者偏差：企鹅苟活】[冻灵熊]扫了一眼缩在角落的[企鹅]，没有动手。[路人D](企鹅) \"活下来了！企鹅是对的！他看不见我们！\" [九九](疑惑) \"企鹅没死？难道关键是体型？\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[路人D]",
+          "[企鹅]",
+          "[九九]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": []
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 8,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：UI弹窗系统音:【第二轮：脂肪防御】。[炮灰B](开启\"懂王\"模式) \"蠢货！刚才熊是因为乱动才死的！企鹅能活是因为它们缩着不动！大家选海象！只要趴着不动，脂肪就能把热量封死！\" 【路人反应：跟风企鹅与海象】[路人E]：\"不！企鹅才是版本答案！我选企鹅！\" [路人F]：\"我信海象！物理学常识！脂肪隔热！\" VFX：场上一半人变【海象】，一半人变【企鹅】。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[炮灰B]",
+          "[路人E]",
+          "[路人F]",
+          "[海象]",
+          "[企鹅]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI弹窗"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 9,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：【系统误导】扫描线扫过[海象]群。UI弹窗:【热量检测：安全（绿色）】。[炮灰B](嘲讽九九) \"喂！那边的！还在犹豫什么？\" [冻灵熊](深吸一口气，嘲讽) \"是不动…… 但你们现在的味道……像刚出笼的一屉包子。\"]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[海象]",
+          "[炮灰B]",
+          "[九九]",
+          "[冻灵熊]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI弹窗"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 10,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：VFX：所有[海象]的背上同时开始疯狂喷蒸汽（积热爆发）。[冻灵熊](群杀) \"开饭了。\" VFX：[海象]群团灭。【企鹅再次嘲讽】[企鹅]们依然活着。[路人D](企鹅) \"哈哈！我就说企鹅无敌！傻大个们全死了！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[海象]",
+          "[企鹅]",
+          "[路人D]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "蒸汽"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 11,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：UI弹窗系统音:【最终清洗：03... 01...】。[路人C](崩溃) \"陆地就是死路！\" 【主角误导（九九带偏路人）】[九九](看着还没死的企鹅，咬牙做出误判) \"企鹅也在冒气，撑不了多久！去水里！水温比空气低，能压住热气！大家快跟我选虎鲸！\" VFX：仅剩的几个人（除了企鹅）全部变身【虎鲸】跳入水中。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[路人C]",
+          "[九九]",
+          "[虎鲸]"
+        ],
+        "scene": "极地冰原-海水边缘",
+        "props": [
+          "UI弹窗"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 12,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：深蓝海水；镜头：主观镜头(POV)-热成像视觉：深蓝海水中，这群[虎鲸]像一锅沸腾的红油汤底。海水瞬间咕嘟咕嘟冒泡。[冻灵熊](残忍) \"本来不想喝汤的……硬是被你们煮开了。\" 动作：[冻灵熊]猛地扎进水中，然后单手抓住一条[虎鲸]的尾巴将其用力甩上了岸，并用力一脚踩爆。[九九]因未变身躲过一劫，但队友全灭。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[虎鲸]",
+          "[冻灵熊]",
+          "[九九]"
+        ],
+        "scene": "深蓝海水-POV热成像",
+        "props": [
+          "红油汤底VFX",
+          "气泡"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 13,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：【清扫企鹅】[冻灵熊]转身，看着满地的[企鹅]。[冻灵熊] \"大餐吃完了……该吃'饭后甜点'了。\" VFX：极寒风暴一吹，所有得意的[企鹅]瞬间冻成冰渣。[路人D](企鹅)：\"哎？\"]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[企鹅]",
+          "[路人D]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "极寒风暴",
+          "冰渣"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 14,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：特写-俯视：[九九]跪在浮冰上，周围全是队友的惨叫。她看向倒影。绿色极光旁，那个被刚才所有人嘲笑的“垃圾袋”图标，在倒影里干干净净。[九九](OS) \"皮毛、脂肪、深海、甚至体型小的企鹅……全死了。所有'求生'的手段，都是在制造热量。\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[九九]"
+        ],
+        "scene": "极地冰原-浮冰",
+        "props": [
+          "倒影",
+          "极光",
+          "垃圾袋图标"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 15,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：特写：[九九]死死盯着[水母]。[九九](顿悟，大吼) \"只有那个'垃圾'——它没有血，没有心，也没有温度！\""]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[九九]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "水母"
+        ]
+      },
+      "duration_seconds": 3,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 16,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：全景：倒计时 01 秒。[九九]按住[宇文骄]的手，狠狠拍下【透明水母】。[九九](咆哮) \"变成死物！别当活人！！\" VFX：两人化为半透明[水母]。[冻灵熊]冲过来，准备收割最后的人头。但他在[九九]面前急刹车。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[九九]",
+          "[宇文骄]",
+          "[冻灵熊]",
+          "[水母]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "透明水母图标"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 17,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：【BOSS崩溃】他的感温视野里，面前空无一物。UI报错:【目标丢失】【热源：0】。[冻灵熊](抓狂，对着空气乱抓) \"人呢？刚才还在冒气！怎么突然变成空气了？！\" 特写：[九九](水母)伸出触手缠住他。[九九](冷酷) \"我是极地霞水母。我和冰水一个温度……在你的雷达里，我就是隐形的。\"]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]",
+          "[九九]",
+          "[水母]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI报错",
+          "触手"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 18,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：UI提示: FREEZE (绝对冻结)。[冻灵熊](卡顿音) \"我看……不……见……\" SFX：嘭！[冻灵熊]炸成漫天纯净冰晶。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[冻灵熊]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI提示",
+          "纯净冰晶"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 19,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：极地冰原；镜头：[九九](解除变身，周围依然无白气) (推眼镜) \"在绝对零度面前……越是想'暖和'地活着，就死得越快。\" UI弹窗:【VICTORY (大吉大利)】 (画面淡出)]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[九九]"
+        ],
+        "scene": "极地冰原-NIGHT",
+        "props": [
+          "UI弹窗"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    },
+    {
+      "segment_index": 20,
+      "prompt_text": "[Style Tags：art(2D_Chinese_comedic_cartoon, bold_vector_outlines, flat_shading, sharp_line_art, in_the_style_of_'KAI XIN CHUI CHUI'),animation(reaction_based, super_deformed_faces, squash_and_stretch, exaggerated, slapstick)；风格：KaiXinChuiChui；场景：深海冰层下；镜头：镜头切到冰原深处。冰层下——一只巨大的、黑影般的[深海冰怪眼睛]慢慢亮起。系统音（突兀出现）:【警告：检测到未知大型冷源……正在接近】 卡黑。]",
+      "image_url": null,
+      "asset": {
+        "characters": [
+          "[深海冰怪眼睛]"
+        ],
+        "scene": "深海冰层下",
+        "props": [
+          "深海冰怪眼睛"
+        ]
+      },
+      "duration_seconds": 5,
+      "is_pro": true,
+      "resolution": "horizontal"
+    }
+  ]
+}

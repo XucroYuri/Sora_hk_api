@@ -10,6 +10,22 @@ class CharacterItem(BaseModel):
     name: str
     id: Optional[str] = None
     
+    @model_validator(mode='before')
+    @classmethod
+    def clean_brackets(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            name = data.get('name', '')
+            # If name is wrapped in brackets [Name], strip them
+            if name.startswith('[') and name.endswith(']'):
+                data['name'] = name[1:-1]
+        elif isinstance(data, str):
+            # If it's a raw string (from legacy list[str])
+            # The migration validator runs before this if structured right, 
+            # but if it's direct instantiation, let's handle string? 
+            # Actually pydantic handles dict->model. 
+            pass
+        return data
+
     def __str__(self):
         # Helper for legacy string representation logic if needed
         return f"{self.name} {self.id}" if self.id else self.name
@@ -25,6 +41,7 @@ class Asset(BaseModel):
         """
         Migrates legacy List[str] characters to List[CharacterItem].
         Example: ["Alice@123"] -> [{"name": "Alice", "id": "@123"}]
+        Also handles [" [Alice] "] -> [{"name": "Alice", ...}]
         """
         if isinstance(data, dict):
             chars = data.get('characters', [])
@@ -33,18 +50,18 @@ class Asset(BaseModel):
                 for item in chars:
                     if isinstance(item, str):
                         # Parse string format
-                        # Logic similar to _parse_name_and_id but simple here
+                        # Clean brackets first
+                        clean_item = item.strip()
+                        if clean_item.startswith('[') and clean_item.endswith(']'):
+                            clean_item = clean_item[1:-1]
+                            
                         # Support "Name@ID" or "Name (@ID)"
-                        c_name = item
+                        c_name = clean_item
                         c_id = None
                         
-                        # Try finding ID pattern @...
-                        # Note: This simple migration assumes the format is somewhat standard
-                        if '@' in item:
-                            parts = item.split('@', 1)
-                            # Cleanup name part: remove trailing parens or spaces
+                        if '@' in clean_item:
+                            parts = clean_item.split('@', 1)
                             c_name = parts[0].strip().rstrip('(').strip()
-                            # ID part: ensure it starts with @
                             c_id = '@' + parts[1].strip().rstrip(')')
                         
                         new_chars.append({'name': c_name, 'id': c_id})
@@ -90,6 +107,8 @@ class Segment(BaseModel):
 
 class Storyboard(BaseModel):
     segments: List[Segment]
+    metadata: Optional[dict] = None
+    character_bible: Optional[List[dict]] = None
     _comment: Optional[str] = None
 
 class GenerationTask(BaseModel):

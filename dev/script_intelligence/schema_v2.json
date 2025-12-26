@@ -1,0 +1,50 @@
+{
+  "_comment": "CineFlow Schema V2 - 专为长文本智能解析设计",
+  "metadata": {
+    "project_name": "示例剧本项目",
+    "source_file": "original_script.txt",
+    "global_summary": "这是一个关于...的故事 (LLM 生成的全局概括，用于维持一致性)",
+    "genre": "Sci-Fi",
+    "total_estimated_duration": 120
+  },
+  "character_bible": [
+    {
+      "id": "@xiaomei",
+      "name": "小美",
+      "aliases": ["小美老师", "她", "那个女人", "Miss Xiao"],
+      "description": "28岁，短发，戴红框眼镜，穿着职业装。",
+      "voice_id": "zh_female_calm"
+    },
+    {
+      "id": "@wang",
+      "name": "王大锤",
+      "aliases": ["大锤", "老王", "他"],
+      "description": "35岁，身材魁梧，穿着蓝色工装。",
+      "voice_id": "zh_male_deep"
+    }
+  ],
+  "segments": [
+    {
+      "segment_index": 1,
+      "beat_ref": "Beat 1: 开场",
+      "source_text_chunk": "小美走进教室，放下书本。（原文片段）",
+      "prompt_text": "((小美)) 走进明亮的教室，将厚重的书本放在讲台上。阳光洒在她的脸上。",
+      "dialogue": "“同学们，上课了。”",
+      "asset": {
+        "characters": [
+          {
+            "name": "小美",
+            "id": "@xiaomei"
+          }
+        ],
+        "scene": "Classroom - Day",
+        "props": ["Books", "Podium"]
+      },
+      "video_params": {
+        "duration": 5,
+        "resolution": "horizontal",
+        "camera_movement": "Static"
+      }
+    }
+  ]
+}

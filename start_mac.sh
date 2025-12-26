@@ -30,8 +30,13 @@ source venv/bin/activate
 # Install requirements if needed
 if [ ! -f "venv/.installed_flag" ]; then
     echo "[INFO] Installing dependencies..."
-    pip install -r requirements.txt
-    touch venv/.installed_flag
+    pip install --upgrade pip
+    if pip install -r requirements.txt; then
+        touch venv/.installed_flag
+    else
+        echo "[ERROR] Failed to install dependencies."
+        exit 1
+    fi
 fi
 
 # Run

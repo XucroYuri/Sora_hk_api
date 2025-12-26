@@ -19,23 +19,83 @@ POLL_INITIAL_WAIT = 20
 POLL_INTERVAL = 10      
 MAX_POLL_TIME = 2100     # 35分钟 (覆盖 Pro 模式最长生成时间)
 
+def _inject_character_ids(text: str, characters: list) -> str:
+    """
+    Replaces character names with their IDs in the text, avoiding quoted dialogue.
+    Enforces a trailing space after the ID.
+    
+    Smart Strict Mode:
+    - If the text uses explicit brackets for ANY known character (e.g. "[Alice]"), 
+      we assume strict V2 formatting. In this mode, ONLY bracketed names are replaced.
+      Plain names (e.g. "Alice") are treated as normal text (distinction rule).
+    - If NO brackets are found for known characters, we fall back to Legacy Mode
+      (replacing plain names).
+    """
+    if not characters:
+        return text
+
+    # Sort by name length (descending)
+    sorted_chars = sorted(characters, key=lambda x: len(x.name), reverse=True)
+    
+    # 1. Detect Mode
+    # Check if any character appears as "[Name]" in the text
+    strict_mode = False
+    for char in sorted_chars:
+        # Simple check: "[Name]" in text
+        # (Technically we should check if it's outside quotes, but a quick check usually suffices for mode detection)
+        if f"[{char.name}]" in text:
+            strict_mode = True
+            break
+            
+    # logger.debug(f"ID Injection Mode: {'Strict ([Name])' if strict_mode else 'Legacy (Name)'}")
+
+    for char in sorted_chars:
+        if not char.id:
+            continue
+            
+        name = char.name
+        char_id = char.id
+        replacement = f"{char_id} "
+        esc_name = re.escape(name)
+        
+        # Regex Construction based on Mode
+        if strict_mode:
+            # STRICT: Match quotes (ignore) OR [Name] (replace)
+            # We DO NOT match plain Name
+            pattern = r'("[^"]*"|“[^”]*”)|(\[' + esc_name + r'\])'
+        else:
+            # LEGACY: Match quotes (ignore) OR [Name] (replace) OR Name (replace)
+            # (Keeping [Name] support in legacy just in case)
+            pattern = r'("[^"]*"|“[^”]*”)|(\[' + esc_name + r'\])|(' + esc_name + r')'
+        
+        def repl(m):
+            # Group 1 is always quotes -> keep
+            if m.group(1):
+                return m.group(1)
+            # Any other match -> replace
+            return replacement
+            
+        text = re.sub(pattern, repl, text)
+        
+    return text
+
 def construct_enhanced_prompt(segment) -> str:
     """
     Constructs a rich prompt by merging prompt_text with asset info and director intent.
-    Ensures no narrative context is lost when sending to the API.
-    Also enforces @characterid format with trailing space.
+    Now uses IN-PLACE replacement for Character IDs instead of appending.
     """
-    final_prompt = segment.prompt_text.strip()
+    # 1. Apply Character ID Injection (Name -> @ID)
+    # This serves as the UNIQUE anchor for characters.
+    final_prompt = _inject_character_ids(segment.prompt_text.strip(), segment.asset.characters)
     
-    # 1. Asset Integration (Scene, Characters, Props)
+    # 2. Asset Integration (Scene, Props) - Characters are now handled in-text
     asset_info = []
     if segment.asset:
         if segment.asset.scene:
             asset_info.append(f"Scene: {segment.asset.scene}")
         
-        if segment.asset.characters:
-            chars_str = ", ".join(str(c) for c in segment.asset.characters)
-            asset_info.append(f"Characters: {chars_str}")
+        # We NO LONGER append "Characters: ..." list to avoid redundancy/confusion
+        # The @ID in the text is the primary trigger.
             
         if segment.asset.props:
             props_str = ", ".join(segment.asset.props)
@@ -47,14 +107,13 @@ def construct_enhanced_prompt(segment) -> str:
     if segment.director_intent:
         final_prompt += f" (Director Note: {segment.director_intent})"
 
-    # 3. CRITICAL FIX: Ensure @characterid is followed by a space
-    # Regex explanation: 
-    # Find '@' followed by word characters (\w+), 
-    # but ONLY if not already followed by a space.
-    # We replace it with the match + a space.
-    final_prompt = re.sub(r'(@\w+)(?!\s)', r'\1 ', final_prompt)
+    # 3. Clean up formatting
+    # MANDATORY SPACE ENFORCEMENT: 
+    # Ensure every @ID is followed by a space, even before punctuation or CJK characters.
+    # We add a space BEFORE and AFTER the @ID to ensure absolute separation from all surrounding characters.
+    final_prompt = re.sub(r'(@[a-zA-Z0-9_]+)', r' \1 ', final_prompt)
     
-    # Clean up any potential double spaces created by the above (safety)
+    # Collapse multiple spaces
     final_prompt = re.sub(r'\s+', ' ', final_prompt)
         
     return final_prompt.strip()
