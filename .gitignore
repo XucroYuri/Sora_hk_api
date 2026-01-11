@@ -11,6 +11,7 @@ node_modules/
 .vscode/
 .idea/
 .DS_Store
+.trae/
 
 # Output & Media
 output/
