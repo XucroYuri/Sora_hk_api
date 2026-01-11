@@ -44,7 +44,7 @@
 
 ## Migration Notes
 
-- Use `.env.example` to configure provider keys.
+- Create a `.env` file to configure provider keys.
 - If backend auth is enabled, set `VITE_AUTH_TOKEN` for frontend.
 
 ---

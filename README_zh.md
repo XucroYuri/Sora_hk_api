@@ -48,7 +48,6 @@ graph TD
 
 ### 1) 后端（FastAPI）
 ```bash
-cp .env.example .env
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -75,7 +74,7 @@ VITE_AUTH_TOKEN=your_token_here
 
 ## ⚙️ 配置说明 (.env)
 
-关键字段如下（完整列表见 `.env.example`）：
+请手动创建 `.env` 文件并填写关键字段：
 
 ```ini
 SORA_API_KEY=...
@@ -120,7 +119,6 @@ CineFlow/
 ├── src/                    # Legacy CLI 流水线
 ├── input/                  # 分镜模板
 ├── docs/                   # 规范、OpenAPI、验收
-├── .env.example
 └── main.py
 ```
 

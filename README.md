@@ -48,7 +48,6 @@ graph TD
 
 ### 1) Backend (FastAPI)
 ```bash
-cp .env.example .env
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -75,7 +74,7 @@ Open: `http://127.0.0.1:3000/`
 
 ## ⚙️ Configuration (.env)
 
-Key variables (see `.env.example` for full list):
+Create a `.env` file with required variables:
 
 ```ini
 SORA_API_KEY=...
@@ -122,7 +121,6 @@ CineFlow/
 ├── src/                    # Legacy CLI pipeline
 ├── input/                  # Storyboard templates
 ├── docs/                   # Specs, OpenAPI, acceptance
-├── .env.example
 └── main.py
 ```
 
