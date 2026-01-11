@@ -114,8 +114,8 @@ def process_directory_from_md(md_path: Path):
             try:
                 data = json.loads(json_str_fixed)
                 print("  [OK] Aggressive fix worked.")
-            except:
-                print(f"  [ERROR] Aggressive fix failed.")
+            except json.JSONDecodeError as e:
+                print(f"  [ERROR] Aggressive fix failed: {e}")
                 return
 
         if "segments" not in data:
@@ -137,7 +137,7 @@ def process_directory_from_md(md_path: Path):
             
         print(f"  [OK] Saved to: {output_path}")
 
-    except Exception as e:
+    except (OSError, json.JSONDecodeError, ValueError) as e:
         print(f"  [ERROR] Failed: {e}")
 
 def main():

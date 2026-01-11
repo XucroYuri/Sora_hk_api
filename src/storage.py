@@ -3,8 +3,7 @@ import os
 import hashlib
 from pathlib import Path
 from typing import Optional
-from qcloud_cos import CosConfig
-from qcloud_cos import CosS3Client
+from qcloud_cos import CosConfig, CosS3Client, CosClientError, CosServiceError
 from .config import settings
 
 logger = logging.getLogger(__name__)
@@ -25,8 +24,8 @@ class TencentCOSClient:
                 self.bucket = settings.COS_BUCKET
                 self.enabled = True
                 logger.info("Tencent COS Client initialized successfully.")
-            except Exception as e:
-                logger.error(f"Failed to initialize Tencent COS Client: {e}")
+            except (CosClientError, CosServiceError, OSError, ValueError) as e:
+                logger.exception(f"Failed to initialize Tencent COS Client: {e}")
         else:
             logger.warning("Tencent COS credentials not fully configured. Image upload disabled.")
 
@@ -82,6 +81,6 @@ class TencentCOSClient:
             logger.info(f"Upload successful. URL: {url}")
             return url
             
-        except Exception as e:
-            logger.error(f"Failed to upload file to COS: {e}")
+        except (CosClientError, CosServiceError, OSError, ValueError) as e:
+            logger.exception(f"Failed to upload file to COS: {e}")
             return None

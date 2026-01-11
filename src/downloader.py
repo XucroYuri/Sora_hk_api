@@ -4,7 +4,7 @@ import logging
 import errno
 from pathlib import Path
 from typing import Optional
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type, RetryError
 from .config import settings
 
 logger = logging.getLogger(__name__)
@@ -25,8 +25,13 @@ def _download_with_retry(url: str, tmp_path: Path):
     if settings.HTTPS_PROXY:
         proxies["https"] = settings.HTTPS_PROXY
 
-    # IO Protection: Increased timeout to 300s
-    with requests.get(url, stream=True, proxies=proxies, timeout=300) as r:
+    # IO Protection: Use configurable timeout to protect long downloads
+    with requests.get(
+        url,
+        stream=True,
+        proxies=proxies,
+        timeout=settings.DOWNLOAD_TIMEOUT_SECONDS,
+    ) as r:
         r.raise_for_status()
         
         total_size = int(r.headers.get('content-length', 0))
@@ -73,7 +78,7 @@ def download_file(url: str, dest_path: Path) -> bool:
             tmp_path.unlink()
         return False
 
-    except Exception as e:
+    except (requests.RequestException, RetryError) as e:
         logger.error(f"Download failed for {url} after retries: {e}")
         if tmp_path.exists():
             tmp_path.unlink()

@@ -59,7 +59,7 @@ class SoraClient:
                 method, 
                 url, 
                 json=data, 
-                timeout=30
+                timeout=settings.API_REQUEST_TIMEOUT_SECONDS
             )
             
             # Traceability: Log the Request ID from headers (common standard: x-request-id)
@@ -73,7 +73,36 @@ class SoraClient:
                 raise RateLimitError(f"Rate limit exceeded [ReqID: {req_id}]")
             
             response.raise_for_status()
-            return response.json()
+
+            if response.status_code == 204:
+                msg = f"Empty response (204) from API [ReqID: {req_id}]"
+                logger.error(msg)
+                raise APIError(msg)
+
+            content_type = response.headers.get("Content-Type", "")
+            if "application/json" not in content_type and "+json" not in content_type:
+                body_preview = (response.text or "").strip()
+                if len(body_preview) > 500:
+                    body_preview = body_preview[:500] + "...(truncated)"
+                msg = (
+                    "Non-JSON response from API "
+                    f"(status={response.status_code}, content-type={content_type or 'unknown'}): {body_preview}"
+                )
+                logger.error(msg)
+                raise APIError(msg)
+
+            body_text = (response.text or "").strip()
+            if not body_text:
+                msg = f"Empty response body from API [ReqID: {req_id}]"
+                logger.error(msg)
+                raise APIError(msg)
+
+            try:
+                return response.json()
+            except ValueError:
+                msg = f"Invalid JSON response from API [ReqID: {req_id}]"
+                logger.error(msg)
+                raise APIError(msg)
             
         except requests.exceptions.RequestException as e:
             # Masking sensitive URL parameters if any (though we use body mostly)

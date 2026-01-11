@@ -14,6 +14,17 @@ from .config import settings
 
 console = Console()
 
+def _prompt_positive_int(label: str, default: int) -> int:
+    while True:
+        value_str = Prompt.ask(label, default=str(default))
+        try:
+            value = int(value_str)
+            if value <= 0:
+                raise ValueError
+            return value
+        except ValueError:
+            console.print("[red]请输入有效的正整数。[/red]")
+
 def interactive_execution_config(tasks: List[GenerationTask]) -> Tuple[List[GenerationTask], int, int]:
     """
     Step 3: Configure execution parameters before starting.
@@ -22,16 +33,16 @@ def interactive_execution_config(tasks: List[GenerationTask]) -> Tuple[List[Gene
     console.print(Panel("⚙️  任务执行配置 (Task Execution Config)", style="cyan"))
     
     # 1. Generation Count per Segment
-    gen_count = int(Prompt.ask(
-        "每个分镜生成版本数量 (Versions per Segment)", 
-        default=str(settings.GEN_COUNT_PER_SEGMENT)
-    ))
+    gen_count = _prompt_positive_int(
+        "每个分镜生成版本数量 (Versions per Segment)",
+        settings.GEN_COUNT_PER_SEGMENT
+    )
     
     # 2. Concurrency
-    concurrency = int(Prompt.ask(
-        "最大并发任务数 (Max Concurrent Tasks)", 
-        default=str(settings.MAX_CONCURRENT_TASKS)
-    ))
+    concurrency = _prompt_positive_int(
+        "最大并发任务数 (Max Concurrent Tasks)",
+        settings.MAX_CONCURRENT_TASKS
+    )
     
     # 3. Segment Filter
     # Extract available segment indices
@@ -39,31 +50,48 @@ def interactive_execution_config(tasks: List[GenerationTask]) -> Tuple[List[Gene
     min_idx, max_idx = min(all_indices), max(all_indices)
     
     console.print(f"当前任务包含分镜范围: [bold]{min_idx} - {max_idx}[/bold] (共 {len(all_indices)} 个分镜)")
-    range_input = Prompt.ask(
-        "请输入要生成的分镜范围 (例如 '1-5, 8, 10' 或 'all')", 
-        default="all"
-    )
-    
-    # Filter Tasks
-    selected_indices = set()
-    if range_input.lower() == "all":
-        selected_indices = set(all_indices)
-    else:
-        # Parse range string
-        parts = range_input.split(',')
-        for part in parts:
-            part = part.strip()
-            if '-' in part:
-                try:
-                    start, end = map(int, part.split('-'))
-                    selected_indices.update(range(start, end + 1))
-                except ValueError:
-                    console.print(f"[red]忽略无效范围格式: {part}[/red]")
-            else:
-                try:
-                    selected_indices.add(int(part))
-                except ValueError:
-                    console.print(f"[red]忽略无效数字: {part}[/red]")
+    while True:
+        range_input = Prompt.ask(
+            "请输入要生成的分镜范围 (例如 '1-5, 8, 10' 或 'all')", 
+            default="all"
+        )
+        
+        # Filter Tasks
+        selected_indices = set()
+        if range_input.lower() == "all":
+            selected_indices = set(all_indices)
+        else:
+            # Parse range string
+            parts = range_input.split(',')
+            for part in parts:
+                part = part.strip()
+                if not part:
+                    continue
+                if '-' in part:
+                    try:
+                        start_str, end_str = part.split('-', 1)
+                        start, end = int(start_str), int(end_str)
+                        if start > end:
+                            console.print(f"[red]忽略无效范围(起始>结束): {part}[/red]")
+                            continue
+                        selected_indices.update(range(start, end + 1))
+                    except ValueError:
+                        console.print(f"[red]忽略无效范围格式: {part}[/red]")
+                else:
+                    try:
+                        selected_indices.add(int(part))
+                    except ValueError:
+                        console.print(f"[red]忽略无效数字: {part}[/red]")
+
+        invalid_indices = sorted(idx for idx in selected_indices if idx not in all_indices)
+        if invalid_indices:
+            console.print(f"[yellow]忽略不存在的分镜编号: {invalid_indices}[/yellow]")
+        selected_indices = set(idx for idx in selected_indices if idx in all_indices)
+
+        if not selected_indices:
+            console.print("[red]未选择任何有效分镜，请重新输入。[/red]")
+            continue
+        break
     
     # Filter original tasks list based on selected indices
     # AND Adjust for the new gen_count (versions)
@@ -169,8 +197,8 @@ def validate_and_fix_image_urls(tasks: List[GenerationTask]):
         # We should save these fixes back to JSON
         try:
             save_tasks_to_json(tasks)
-        except:
-            pass
+        except (OSError, json.JSONDecodeError, ValueError) as e:
+            console.print(f"[yellow]⚠ 无法保存修复后的链接: {e}[/yellow]")
     else:
         console.print("[dim]所有图片链接格式正常。[/dim]")
 
@@ -397,7 +425,7 @@ def interactive_image_injection(tasks: List[GenerationTask]):
         if not cos_client.enabled:
             console.print("[yellow]未检测到腾讯云 COS 配置，跳过图片上传步骤。[/yellow]")
             return
-    except Exception as e:
+    except (OSError, ValueError) as e:
         console.print(f"[red]COS 客户端初始化失败: {e}[/red]")
         return
 
@@ -450,7 +478,7 @@ def interactive_image_injection(tasks: List[GenerationTask]):
                     try:
                         _persist_segment_change(task.source_file, task.segment)
                         console.print(f"  [green]✔ 上传并保存成功:[/green] {url}")
-                    except Exception as e:
+                    except (OSError, json.JSONDecodeError, ValueError) as e:
                         console.print(f"  [red]⚠ 上传成功但保存JSON失败: {e}[/red]")
                 else:
                     console.print(f"  [red]✘ 上传失败[/red]")
@@ -559,7 +587,7 @@ def save_tasks_to_json(tasks: List[GenerationTask]):
                         json.dump(data, f, indent=2, ensure_ascii=False)
                     updated_files += 1
                     
-            except Exception as e:
+            except (OSError, json.JSONDecodeError, ValueError) as e:
                 console.print(f"[red]保存失败 {source_file.name}: {e}[/red]")
 
     if updated_files > 0:

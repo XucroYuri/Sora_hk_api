@@ -44,8 +44,8 @@ class AssetManager:
             # Create a .gitkeep or README to ensure git tracks it if empty? 
             # (Optional, skipping for now to keep it clean)
             
-        except Exception as e:
-            logger.error(f"Failed to scaffold asset directory for {self.json_path}: {e}")
+        except OSError as e:
+            logger.exception(f"Failed to scaffold asset directory for {self.json_path}: {e}")
 
     def _find_image(self, directory: Path, stem_name: str) -> Optional[Path]:
         """

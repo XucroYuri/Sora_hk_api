@@ -1,0 +1,1505 @@
+openapi: 3.0.3
+info:
+  title: CineFlow API Draft
+  version: 0.1.0
+servers:
+  - url: /api/v1
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Storyboards
+  - name: Segments
+  - name: Runs
+  - name: Tasks
+  - name: Providers
+  - name: Models
+  - name: Admin
+  - name: Client Events
+
+paths:
+  /models:
+    get:
+      tags: [Models]
+      summary: List logical models
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: enabled
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedModels'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: sora2
+                        display_name: Sora2
+                        description: Logical model for standard generation
+                        enabled: true
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /models/{id}:
+    get:
+      tags: [Models]
+      summary: Get logical model detail
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model'
+              examples:
+                default:
+                  value:
+                    id: sora2
+                    display_name: Sora2
+                    description: Logical model for standard generation
+                    enabled: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /admin/providers:
+    get:
+      tags: [Admin]
+      summary: List providers (admin)
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: enabled
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProviders'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: sora_hk
+                        display_name: Sora.hk
+                        enabled: true
+                        priority: 10
+                        weight: 1
+                        supports_image_to_video: true
+                        supported_durations: [10, 15, 25]
+                        supported_resolutions: [horizontal, vertical]
+                        supports_pro: true
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /admin/providers/{id}:
+    patch:
+      tags: [Admin]
+      summary: Update provider config
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderUpdate'
+            examples:
+              enableProvider:
+                value:
+                  enabled: true
+                  priority: 5
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /admin/models:
+    get:
+      tags: [Admin]
+      summary: List logical models with provider map
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: enabled
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminModels'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: sora2
+                        display_name: Sora2
+                        description: Logical model for standard generation
+                        enabled: true
+                        provider_map:
+                          sora_hk: [sora2]
+                          openai: [sora-2, sora-2-2025-12-08, sora-2-2025-10-06]
+                          aihubmix: [sora-2, web-sora-2]
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /admin/models/{id}:
+    get:
+      tags: [Admin]
+      summary: Get logical model config
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAdmin'
+              examples:
+                default:
+                  value:
+                    id: sora2
+                    display_name: Sora2
+                    description: Logical model for standard generation
+                    enabled: true
+                    provider_map:
+                      sora_hk: [sora2]
+                      openai: [sora-2, sora-2-2025-12-08, sora-2-2025-10-06]
+                      aihubmix: [sora-2, web-sora-2]
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Admin]
+      summary: Update logical model config
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelUpdate'
+            examples:
+              disableModel:
+                value:
+                  enabled: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAdmin'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /admin/models/{id}/providers/{provider_id}:
+    patch:
+      tags: [Admin]
+      summary: Update provider model mapping for logical model
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - name: provider_id
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelProviderMapUpdate'
+            examples:
+              setProviderModels:
+                value:
+                  provider_model_ids: [sora-2, web-sora-2]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAdmin'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /providers:
+    get:
+      tags: [Providers]
+      summary: List providers
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: enabled
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProviders'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: sora_hk
+                        display_name: Sora.hk
+                        enabled: true
+                        priority: 10
+                        weight: 1
+                        supports_image_to_video: true
+                        supported_durations: [10, 15, 25]
+                        supported_resolutions: [horizontal, vertical]
+                        supports_pro: true
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /providers/{id}:
+    get:
+      tags: [Providers]
+      summary: Get provider detail
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /providers/{id}/capabilities:
+    get:
+      tags: [Providers]
+      summary: Get provider capabilities
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProviderCapabilities'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /storyboards:
+    get:
+      tags: [Storyboards]
+      summary: List storyboards
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: name
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedStoryboards'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: sb_123
+                        name: storyboard_demo.json
+                        created_at: '2026-01-02T10:00:00Z'
+                        segment_count: 2
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Storyboards]
+      summary: Upload storyboard JSON
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storyboard'
+              examples:
+                created:
+                  value:
+                    id: sb_123
+                    name: storyboard_demo.json
+                    created_at: '2026-01-02T10:00:00Z'
+                    segment_count: 2
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /storyboards/{id}:
+    get:
+      tags: [Storyboards]
+      summary: Get storyboard detail
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storyboard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /storyboards/{id}/segments:
+    get:
+      tags: [Storyboards]
+      summary: List segments for storyboard
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: resolution
+          in: query
+          schema:
+            type: string
+            enum: [horizontal, vertical]
+        - name: is_pro
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSegments'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: seg_001
+                        segment_index: 1
+                        prompt_text: A futuristic city skyline at night with neon lights reflecting on the river. Cyberpunk style.
+                        image_url: null
+                        asset:
+                          characters: []
+                          scene: Future City
+                          props: []
+                        duration_seconds: 10
+                        resolution: horizontal
+                        is_pro: false
+                        director_intent: Establishing shot.
+                    page: 1
+                    page_size: 20
+                    total: 2
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /segments/{id}:
+    patch:
+      tags: [Segments]
+      summary: Update segment fields
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SegmentUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segment'
+              examples:
+                updated:
+                  value:
+                    id: seg_001
+                    segment_index: 1
+                    prompt_text: Updated prompt
+                    director_intent: Cinematic lighting
+                    image_url: https://example.com/start.png
+                    duration_seconds: 10
+                    resolution: horizontal
+                    is_pro: false
+                    asset:
+                      characters:
+                        - name: Alice
+                          id: '@char_123'
+                      scene: Cyberpunk street
+                      props:
+                        - Neon Umbrella
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /segments/{id}/assets/start-image:
+    post:
+      tags: [Segments]
+      summary: Upload start frame image
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [image_url]
+                properties:
+                  image_url:
+                    type: string
+                    format: uri
+              examples:
+                uploaded:
+                  value:
+                    image_url: https://example.com/start.png
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /runs:
+    get:
+      tags: [Runs]
+      summary: List runs
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/RunStatus'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRuns'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: run_456
+                        status: running
+                        total_tasks: 2
+                        created_at: '2026-01-02T10:10:00Z'
+                    page: 1
+                    page_size: 20
+                    total: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Runs]
+      summary: Create run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+              examples:
+                created:
+                  value:
+                    id: run_456
+                    status: running
+                    total_tasks: 2
+                    completed: 0
+                    failed: 0
+                    download_failed: 0
+                    created_at: '2026-01-02T10:10:00Z'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /runs/{id}:
+    get:
+      tags: [Runs]
+      summary: Get run detail
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /runs/{id}/tasks:
+    get:
+      tags: [Runs]
+      summary: List tasks for run
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/Order'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/TaskStatus'
+        - name: segment_index
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+        - name: error_code
+          in: query
+          schema:
+            $ref: '#/components/schemas/TaskErrorCode'
+        - name: retryable
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTasks'
+              examples:
+                default:
+                  value:
+                    items:
+                      - id: task_789
+                        status: completed
+                        video_url: null
+                        metadata_url: /api/v1/tasks/task_789/metadata
+                        error_code: null
+                        retryable: null
+                        segment_index: 1
+                    page: 1
+                    page_size: 20
+                    total: 2
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /tasks/{id}:
+    get:
+      tags: [Tasks]
+      summary: Get task detail
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              examples:
+                default:
+                  value:
+                    id: task_789
+                    status: completed
+                    video_url: null
+                    metadata_url: /api/v1/tasks/task_789/metadata
+                    full_prompt: Alice ... [Scene: ...]
+                    error_msg: null
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /tasks/{id}/retry:
+    post:
+      tags: [Tasks]
+      summary: Retry task
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              examples:
+                accepted:
+                  value:
+                    id: task_789
+                    status: running
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /tasks/{id}/download:
+    get:
+      tags: [Tasks]
+      summary: Download video
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            video/mp4:
+              schema:
+                type: string
+                format: binary
+        '302':
+          description: Redirect to remote video URL
+          headers:
+            Location:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /tasks/{id}/metadata:
+    get:
+      tags: [Tasks]
+      summary: Download metadata JSON
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /client-events:
+    post:
+      tags: [Client Events]
+      summary: Record client-side events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientEventBatch'
+            examples:
+              apiError:
+                value:
+                  events:
+                    - event_type: api_error
+                      severity: error
+                      timestamp: "2025-02-01T12:34:56Z"
+                      user_locale: zh-CN
+                      endpoint: /api/v1/runs
+                      method: POST
+                      status_code: 500
+                      latency_ms: 1200
+                      error_code: server_error
+                      message: Request failed
+              taskError:
+                value:
+                  events:
+                    - event_type: task_error
+                      severity: warning
+                      run_id: 6f1e7b7b61ac4d149920d5311b4fb7c1
+                      task_id: 39802f75b71847e2bb12d12c933b2f5c
+                      provider_id: sora_hk
+                      model_id: sora2
+                      error_code: rate_limited
+                      message: Provider throttled
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientEventBatchAck'
+              examples:
+                default:
+                  value:
+                    count: 1
+                    events:
+                      - event_id: 8bd50f642b304b16b27b3c0b71501726
+                        received_at: "2025-02-01T12:35:10Z"
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    CookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+    Page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    PageSize:
+      name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+    Sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+    Order:
+      name: order
+      in: query
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: desc
+
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                code: unauthorized
+                message: Authentication required
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            not_found:
+              value:
+                code: not_found
+                message: Resource not found
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            schema_error:
+              value:
+                code: schema_error
+                message: Invalid input
+                details:
+                  errors:
+                    - loc: [segments, 0, prompt_text]
+                      msg: Prompt text cannot be empty.
+                      type: value_error
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+
+    CharacterItem:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          nullable: true
+          pattern: '^@?[a-zA-Z0-9_]+$'
+
+    Asset:
+      type: object
+      required: [characters, props]
+      properties:
+        characters:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacterItem'
+        scene:
+          type: string
+          nullable: true
+        props:
+          type: array
+          items:
+            type: string
+
+    Segment:
+      type: object
+      required: [id, segment_index, prompt_text, duration_seconds, resolution, is_pro]
+      properties:
+        id:
+          type: string
+        segment_index:
+          type: integer
+          minimum: 1
+        prompt_text:
+          type: string
+          minLength: 1
+        director_intent:
+          type: string
+          nullable: true
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+        duration_seconds:
+          type: integer
+          enum: [4, 8, 10, 12, 15, 25]
+        resolution:
+          type: string
+          enum: [horizontal, vertical]
+        is_pro:
+          type: boolean
+        asset:
+          $ref: '#/components/schemas/Asset'
+
+    SegmentUpdate:
+      type: object
+      properties:
+        prompt_text:
+          type: string
+          minLength: 1
+        director_intent:
+          type: string
+          nullable: true
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+        duration_seconds:
+          type: integer
+          enum: [4, 8, 10, 12, 15, 25]
+        resolution:
+          type: string
+          enum: [horizontal, vertical]
+        is_pro:
+          type: boolean
+        asset:
+          $ref: '#/components/schemas/Asset'
+
+    Storyboard:
+      type: object
+      required: [id, name, created_at, segment_count]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        segment_count:
+          type: integer
+          minimum: 0
+
+    StoryboardDetail:
+      allOf:
+        - $ref: '#/components/schemas/Storyboard'
+        - type: object
+          properties:
+            segments:
+              type: array
+              items:
+                $ref: '#/components/schemas/Segment'
+
+    RunStatus:
+      type: string
+      enum: [queued, running, completed, failed, download_failed]
+
+    Run:
+      type: object
+      required: [id, status, total_tasks, created_at]
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/RunStatus'
+        total_tasks:
+          type: integer
+          minimum: 0
+        completed:
+          type: integer
+          minimum: 0
+        failed:
+          type: integer
+          minimum: 0
+        download_failed:
+          type: integer
+          minimum: 0
+        created_at:
+          type: string
+          format: date-time
+
+    RunCreate:
+      type: object
+      required: [storyboard_id, model_id, gen_count, concurrency, range, output_mode, dry_run, force]
+      properties:
+        storyboard_id:
+          type: string
+          minLength: 1
+        model_id:
+          type: string
+          minLength: 1
+        routing_strategy:
+          type: string
+          enum: [manual, default, failover, weighted, cost, latency, quota]
+        gen_count:
+          type: integer
+          minimum: 1
+          maximum: 10
+        concurrency:
+          type: integer
+          minimum: 1
+          maximum: 50
+        range:
+          type: string
+          minLength: 1
+        output_mode:
+          type: string
+          enum: [centralized, in_place, custom]
+        output_path:
+          type: string
+          nullable: true
+        dry_run:
+          type: boolean
+        force:
+          type: boolean
+
+    TaskStatus:
+      type: string
+      enum: [queued, running, completed, failed, download_failed]
+
+    TaskErrorCode:
+      type: string
+      enum:
+        - content_policy
+        - validation_error
+        - rate_limited
+        - timeout
+        - quota_exceeded
+        - unauthorized
+        - forbidden
+        - dependency_error
+        - server_error
+        - unknown_error
+        - download_failed
+        - no_provider
+
+    Task:
+      type: object
+      required: [id, status]
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        segment_index:
+          type: integer
+          minimum: 1
+          nullable: true
+        video_url:
+          type: string
+          format: uri
+          nullable: true
+        metadata_url:
+          type: string
+          format: uri
+          nullable: true
+        full_prompt:
+          type: string
+          nullable: true
+        error_msg:
+          type: string
+          nullable: true
+        error_code:
+          $ref: '#/components/schemas/TaskErrorCode'
+          nullable: true
+        retryable:
+          type: boolean
+          nullable: true
+
+    ClientEventType:
+      type: string
+      enum: [ui_error, api_error, task_error, i18n_error]
+
+    ClientEventSeverity:
+      type: string
+      enum: [info, warning, error, critical]
+
+    ClientEvent:
+      type: object
+      required: [event_type]
+      properties:
+        event_id:
+          type: string
+        event_type:
+          $ref: '#/components/schemas/ClientEventType'
+        severity:
+          $ref: '#/components/schemas/ClientEventSeverity'
+        timestamp:
+          type: string
+          format: date-time
+        timezone:
+          type: string
+        user_locale:
+          type: string
+        endpoint:
+          type: string
+        method:
+          type: string
+        status_code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        latency_ms:
+          type: integer
+          minimum: 0
+        run_id:
+          type: string
+        task_id:
+          type: string
+        provider_id:
+          type: string
+        model_id:
+          type: string
+        error_code:
+          type: string
+        message:
+          type: string
+        stack:
+          type: string
+        context:
+          type: object
+          additionalProperties: true
+
+    ClientEventBatch:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/ClientEvent'
+
+    ClientEventAck:
+      type: object
+      required: [event_id, received_at]
+      properties:
+        event_id:
+          type: string
+        received_at:
+          type: string
+          format: date-time
+
+    ClientEventBatchAck:
+      type: object
+      required: [count, events]
+      properties:
+        count:
+          type: integer
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientEventAck'
+
+    PaginatedStoryboards:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Storyboard'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    PaginatedSegments:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    PaginatedRuns:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Run'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    PaginatedTasks:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    Model:
+      type: object
+      required: [id, display_name, enabled]
+      properties:
+        id:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        enabled:
+          type: boolean
+
+    ModelAdmin:
+      type: object
+      required: [id, display_name, enabled, provider_map]
+      properties:
+        id:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        enabled:
+          type: boolean
+        provider_map:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+    ModelUpdate:
+      type: object
+      properties:
+        display_name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        enabled:
+          type: boolean
+
+    ModelProviderMapUpdate:
+      type: object
+      required: [provider_model_ids]
+      properties:
+        provider_model_ids:
+          type: array
+          items:
+            type: string
+
+    PaginatedModels:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    PaginatedAdminModels:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelAdmin'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer
+
+    Provider:
+      type: object
+      required: [id, display_name, enabled, priority]
+      properties:
+        id:
+          type: string
+        display_name:
+          type: string
+        enabled:
+          type: boolean
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 100
+        weight:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 1
+        supports_image_to_video:
+          type: boolean
+        supported_durations:
+          type: array
+          items:
+            type: integer
+        supported_resolutions:
+          type: array
+          items:
+            type: string
+            enum: [horizontal, vertical]
+        supports_pro:
+          type: boolean
+
+    ProviderUpdate:
+      type: object
+      properties:
+        display_name:
+          type: string
+        enabled:
+          type: boolean
+        priority:
+          type: integer
+          minimum: 1
+          maximum: 100
+        weight:
+          type: integer
+          minimum: 1
+          maximum: 100
+        supports_image_to_video:
+          type: boolean
+        supported_durations:
+          type: array
+          items:
+            type: integer
+        supported_resolutions:
+          type: array
+          items:
+            type: string
+            enum: [horizontal, vertical]
+        supports_pro:
+          type: boolean
+
+    ProviderCapabilities:
+      type: object
+      required: [supports_image_to_video, supported_durations, supported_resolutions, supports_pro]
+      properties:
+        supports_image_to_video:
+          type: boolean
+        supported_durations:
+          type: array
+          items:
+            type: integer
+        supported_resolutions:
+          type: array
+          items:
+            type: string
+            enum: [horizontal, vertical]
+        supports_pro:
+          type: boolean
+
+    PaginatedProviders:
+      type: object
+      required: [items, page, page_size, total]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Provider'
+        page:
+          type: integer
+        page_size:
+          type: integer
+        total:
+          type: integer

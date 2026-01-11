@@ -206,6 +206,7 @@ def main():
     completed_count = 0
     
     global executor
+    interrupted = False
     try:
         with Progress(
             SpinnerColumn(),
@@ -220,33 +221,39 @@ def main():
             
             # Use the user-configured concurrency
             executor = ThreadPoolExecutor(max_workers=concurrency)
-            future_to_task = {
-                executor.submit(process_task, task, client, args.dry_run, args.force): task 
-                for task in tasks
-            }
-            
-            for future in as_completed(future_to_task):
-                task = future_to_task[future]
-                try:
-                    result = future.result()
-                    if result == "failed":
-                        failed_tasks.append(task.id)
-                        progress.console.print(f"[red]✘ 任务失败: {task.id}[/red]")
-                    elif result == "skipped":
-                        skipped_count += 1
-                    else:
-                        completed_count += 1
-                        progress.console.print(f"[blue]✔ 任务完成: {task.id}[/blue]")
-                except Exception as exc:
-                    failed_tasks.append(task.id)
-                    console.print(f"[red]Task {task.id} 异常: {exc}[/red]")
+            try:
+                future_to_task = {
+                    executor.submit(process_task, task, client, args.dry_run, args.force): task 
+                    for task in tasks
+                }
                 
-                progress.advance(overall_task)
+                for future in as_completed(future_to_task):
+                    task = future_to_task[future]
+                    try:
+                        result = future.result()
+                        if result == "failed":
+                            failed_tasks.append(task.id)
+                            progress.console.print(f"[red]✘ 任务失败: {task.id}[/red]")
+                        elif result == "skipped":
+                            skipped_count += 1
+                        else:
+                            completed_count += 1
+                            progress.console.print(f"[blue]✔ 任务完成: {task.id}[/blue]")
+                    except Exception as exc:
+                        failed_tasks.append(task.id)
+                        console.print(f"[red]Task {task.id} 异常: {exc}[/red]")
+                    
+                    progress.advance(overall_task)
+            except KeyboardInterrupt:
+                interrupted = True
+                raise
+            finally:
+                if executor:
+                    executor.shutdown(wait=not interrupted, cancel_futures=interrupted)
+                    executor = None
     
     except KeyboardInterrupt:
         console.print("\n[bold red]正在终止所有任务...[/bold red]")
-        if executor:
-            executor.shutdown(wait=False, cancel_futures=True)
 
     # Summary
     console.print("\n" + "="*30)

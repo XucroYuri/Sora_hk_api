@@ -2,6 +2,7 @@ import json
 import logging
 from pathlib import Path
 from typing import List, Literal
+from pydantic import ValidationError
 from .models import Storyboard, GenerationTask
 from .config import settings
 from .asset_manager import AssetManager
@@ -80,7 +81,9 @@ def discover_tasks(
                     
         except json.JSONDecodeError as e:
             logger.error(f"Invalid JSON in {json_file}: {e}")
-        except Exception as e:
+        except ValidationError as e:
+            logger.error(f"Schema validation failed for {json_file}: {e}")
+        except (OSError, ValueError, TypeError) as e:
             logger.error(f"Error processing {json_file}: {e}")
 
     logger.info(f"Discovered {len(tasks)} tasks from {input_dir}")

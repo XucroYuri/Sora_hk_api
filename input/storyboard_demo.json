@@ -20,7 +20,12 @@
       "prompt_text": "Close up of a character named Alice(@alice ) smiling warmly at the camera.",
       "image_url": null,
       "asset": {
-        "characters": ["Alice@alice "],
+        "characters": [
+          {
+            "name": "Alice",
+            "id": "@alice"
+          }
+        ],
         "scene": "Room",
         "props": []
       },

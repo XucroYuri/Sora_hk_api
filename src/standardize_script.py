@@ -37,7 +37,7 @@ def extract_standard_roles(md_path: Path) -> List[str]:
                 if m:
                     roles.add(m.group(1))
                     
-    except Exception as e:
+    except (OSError, UnicodeDecodeError) as e:
         print(f"[WARN] Failed to read roles from {md_path.name}: {e}")
         
     return list(roles)
@@ -189,7 +189,7 @@ def process_directory(dir_path: Path):
                 
             print(f"    [OK] Standardized.")
             
-        except Exception as e:
+        except (OSError, json.JSONDecodeError, KeyError, ValueError) as e:
             print(f"    [ERROR] {e}")
 
 def main():

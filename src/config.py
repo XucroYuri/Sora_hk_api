@@ -14,10 +14,23 @@ class Settings(BaseSettings):
     # API
     SORA_API_KEY: str = Field(..., env="SORA_API_KEY")
     SORA_BASE_URL: str = Field("https://api.sora.hk/v1", env="SORA_BASE_URL")
+    OPENAI_API_KEY: Optional[str] = Field(None, env="OPENAI_API_KEY")
+    OPENAI_BASE_URL: str = Field("https://api.openai.com/v1", env="OPENAI_BASE_URL")
+    AIHUBMIX_API_KEY: Optional[str] = Field(None, env="AIHUBMIX_API_KEY")
+    AIHUBMIX_BASE_URL: str = Field("https://aihubmix.com/v1", env="AIHUBMIX_BASE_URL")
     
     # Execution
     MAX_CONCURRENT_TASKS: int = Field(20, env="MAX_CONCURRENT_TASKS")
     GEN_COUNT_PER_SEGMENT: int = Field(2, env="GEN_COUNT_PER_SEGMENT")
+    MAX_POLL_TIME: int = Field(2100, env="MAX_POLL_TIME")
+    POLL_INITIAL_WAIT_SECONDS: int = Field(20, env="POLL_INITIAL_WAIT_SECONDS")
+    POLL_INTERVAL_SECONDS: int = Field(10, env="POLL_INTERVAL_SECONDS")
+    API_REQUEST_TIMEOUT_SECONDS: int = Field(30, env="API_REQUEST_TIMEOUT_SECONDS")
+    DOWNLOAD_TIMEOUT_SECONDS: int = Field(300, env="DOWNLOAD_TIMEOUT_SECONDS")
+    CONCURRENCY_MIN_TASKS: int = Field(5, env="CONCURRENCY_MIN_TASKS")
+    CONCURRENCY_ERROR_THRESHOLD: int = Field(2, env="CONCURRENCY_ERROR_THRESHOLD")
+    CONCURRENCY_COOLDOWN_SECONDS: int = Field(600, env="CONCURRENCY_COOLDOWN_SECONDS")
+    CONCURRENCY_RECOVERY_RATE_SECONDS: int = Field(60, env="CONCURRENCY_RECOVERY_RATE_SECONDS")
     
     # Proxy
     HTTP_PROXY: Optional[str] = Field(None, env="HTTP_PROXY")
@@ -55,6 +68,10 @@ class SensitiveFilter(logging.Filter):
         # Mask the configured API Key
         if settings.SORA_API_KEY in msg:
             msg = msg.replace(settings.SORA_API_KEY, "sk-******")
+        if settings.OPENAI_API_KEY and settings.OPENAI_API_KEY in msg:
+            msg = msg.replace(settings.OPENAI_API_KEY, "sk-******")
+        if settings.AIHUBMIX_API_KEY and settings.AIHUBMIX_API_KEY in msg:
+            msg = msg.replace(settings.AIHUBMIX_API_KEY, "sk-******")
         
         # Mask any other potential Bearer tokens using Regex
         msg = re.sub(r'Bearer\s+sk-[a-zA-Z0-9]+', 'Bearer sk-******', msg)

@@ -2,6 +2,7 @@ import time
 import threading
 import logging
 from typing import Optional
+from .config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -12,9 +13,18 @@ class AdaptiveConcurrencyController:
     - 安全模式: 遇到连续错误后，降级到最小并发数 (MIN)
     - 恢复机制: 冷却一定时间后，线性释放并发额度 (每分钟+1)
     """
-    def __init__(self, max_concurrency: int = 20, min_concurrency: int = 5):
+    def __init__(
+        self,
+        max_concurrency: int = 20,
+        min_concurrency: Optional[int] = None,
+        error_threshold: Optional[int] = None,
+        cooldown_seconds: Optional[int] = None,
+        recovery_rate_seconds: Optional[int] = None,
+    ):
         self.max_concurrency = max_concurrency
-        self.min_concurrency = min_concurrency
+        self.min_concurrency = (
+            min_concurrency if min_concurrency is not None else settings.CONCURRENCY_MIN_TASKS
+        )
         
         # State
         self.current_active = 0
@@ -24,11 +34,17 @@ class AdaptiveConcurrencyController:
         self.is_safe_mode = False
         self.last_error_time: float = 0
         self.consecutive_errors = 0
-        self.error_threshold = 2  # 连续多少次 API 错误触发熔断
+        self.error_threshold = (
+            error_threshold if error_threshold is not None else settings.CONCURRENCY_ERROR_THRESHOLD
+        )
         
         # Recovery settings
-        self.cooldown_seconds = 600  # 10分钟冷却
-        self.recovery_rate_seconds = 60  # 每分钟恢复1个
+        self.cooldown_seconds = (
+            cooldown_seconds if cooldown_seconds is not None else settings.CONCURRENCY_COOLDOWN_SECONDS
+        )
+        self.recovery_rate_seconds = (
+            recovery_rate_seconds if recovery_rate_seconds is not None else settings.CONCURRENCY_RECOVERY_RATE_SECONDS
+        )
 
     def get_dynamic_limit(self) -> int:
         """根据当前状态计算允许的最大并发数"""
@@ -94,4 +110,10 @@ concurrency_controller = None
 
 def init_controller(max_c: int):
     global concurrency_controller
-    concurrency_controller = AdaptiveConcurrencyController(max_concurrency=max_c)
+    concurrency_controller = AdaptiveConcurrencyController(
+        max_concurrency=max_c,
+        min_concurrency=settings.CONCURRENCY_MIN_TASKS,
+        error_threshold=settings.CONCURRENCY_ERROR_THRESHOLD,
+        cooldown_seconds=settings.CONCURRENCY_COOLDOWN_SECONDS,
+        recovery_rate_seconds=settings.CONCURRENCY_RECOVERY_RATE_SECONDS,
+    )
